@@ -87,8 +87,14 @@ Reformer-pytorch의 Reformer 사용.
 
 ## Train Environment
 Colab GPU 메모리 12G 이상.
-> 가끔 7611Mib로 할당되는 경우 있는데, 학습 되지 않음.
+> 12G 이하로는 학습 되지 않음. 
  
+## 학습결과 
+KoELECTRA의 finetuning 부분을 학습 결과 검증용으로 사용 계획.  
+
+|                    | Size  | **NSMC**<br/>(acc) | **Naver NER**<br/>(F1) | **PAWS**<br/>(acc) | **KorNLI**<br/>(acc) | **KorSTS**<br/>(spearman) | **Question Pair**<br/>(acc) | **KorQuaD (Dev)**<br/>(EM/F1) |
+| :----------------- | :---: | :----------------: | :--------------------: | :----------------: | :------------------: | :-----------------------: | :-------------------------: | :---------------------------: |
+| ReforBERT          |       |                    |                        |                    |                      |                           |                             |                               |
 
 ##  License
 MIT
@@ -103,6 +109,7 @@ Seonghwan Kim
 |20.05.08| Pretrain 코드 테스트|
 |20.05.10| Colab에서 Pretrain 테스트|
 |20.05.11| Colab 학습 중지 후 재개 부분 추가|
+|~20.05.24| Colab 학|
 
 
 
@@ -110,3 +117,4 @@ Seonghwan Kim
 [lucidrains/reformer-pytorch](https://github.com/lucidrains/reformer-pytorch)  
 [BERT(Bidirectional Encoder Representations from Transformers) 구현하기 (1/2)](https://paul-hyun.github.io/bert-01/)  
 [SKTBrain/KoBERT](https://github.com/SKTBrain/KoBERT)  
+[monologg/KoELECTRA](https://github.com/monologg/KoELECTRA)
