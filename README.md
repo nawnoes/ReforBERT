@@ -1,12 +1,12 @@
 # ReforBERT
-Transformer를 개선한 Reformer를 이용한 BERT. pytorch 버전
+Transformer를 개선한 Reformer를 이용한 BERT (ver.pytorch)
 
 ##  Introduction
 2020년 트랜스포머를 개선한 리포머 발표. 
 리포머는 트랜스포머의 제한 사항들을 **LSH**, **RevNet**, **Chunk**을 통해 개선하였다. 
 BERT나 GPT2와 같은 큰 모델들은 많은 컴퓨팅과 메모리를 필요로 하여, 고가의 장비 없이 직접 학습시키는데 많은 제한이 있었다.
 [lucidrains/reformer-pytorch](https://github.com/lucidrains/reformer-pytorch)를 이용하여 
-리포머를 이용한 **BERT**를 만들고 colab을 통해 LM을 학습해 다양한 downstream task에 이용을 목표로 한다.  
+리포머를 이용한 **BERT**를 만들고 colab을 통해 LM을 학습해 다양한 downstream task에 테스트.
   
 ## Architecture
 ### 1. Data
@@ -102,7 +102,7 @@ Seonghwan Kim
 |20.04.25| 시작 |
 |20.05.08| Pretrain 코드 테스트|
 |20.05.10| Colab에서 Pretrain 테스트|
-|20.05.11| Colab 학습 중지 후 재개 부분 가|
+|20.05.11| Colab 학습 중지 후 재개 부분 추가|
 
 
 
