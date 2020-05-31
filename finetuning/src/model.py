@@ -24,4 +24,8 @@ class ReforBertForQA(nn.module):
                         )
         self.qa_output = nn.Linear(embedding_size, self.num_labels)
 
-        torch.nn.init.xavier_uniform_(self.qa_output.weight)
+    def forward(
+                self,
+                input_ids=None,
+
+                )
