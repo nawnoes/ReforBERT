@@ -396,6 +396,7 @@ def load_and_cache_examples(args, tokenizer, evaluate=False, output_examples=Fal
 
 def main(cli_args):
     # Read from config file and make args
+    # config 읽고 arg 만듬
     with open(os.path.join(cli_args.config_dir, cli_args.task, cli_args.config_file)) as f:
         args = AttrDict(json.load(f))
     logger.info("Training/evaluation parameters {}".format(args))
@@ -415,6 +416,7 @@ def main(cli_args):
     logging.getLogger("transformers.data.metrics.squad_metrics").setLevel(logging.WARN)  # Reduce model loading logs
 
     # Load pretrained model and tokenizer
+    # 프리트레인 모델 및 토크나이저 선언
     config = CONFIG_CLASSES[args.model_type].from_pretrained(
         args.model_name_or_path,
     )
