@@ -22,8 +22,9 @@ class ReforBertForQA(nn.module):
                             depth=depth,
                             heads=heads,
                             max_seq_len=max_seq_len,
-                            causal=True) # model(inputs, segments)
-         self.qa_output = nn.Linear(embedding_size, self.num_labels)
+                            causal=True ) # model(inputs, segments)
+
+        self.qa_output = nn.Linear(embedding_size, self.num_labels)
 
     def forward(
                 self,

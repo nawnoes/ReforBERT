@@ -1,14 +1,9 @@
 import sys
 sys.path.append("..")
-import os, argparse, datetime, time, re, collections
 from tqdm import tqdm, trange
 import json
-from random import random, randrange, randint, shuffle, choice
 import numpy as np
-
 import torch
-import torch.nn as nn
-import torch.nn.functional as F
 
 """ pretrain 데이터셋"""
 class PretrainDataSet(torch.utils.data.Dataset):

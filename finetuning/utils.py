@@ -8,74 +8,34 @@ import numpy as np
 from scipy.stats import pearsonr, spearmanr
 from seqeval.metrics import precision_score, recall_score, f1_score, classification_report
 
-from src import (
-    KoBertTokenizer,
-    HanBertTokenizer,
-    ElectraForSequenceClassification,
-    ElectraForQuestionAnswering,
-    XLMRobertaForQuestionAnswering
-)
-from transformers import (
-    BertConfig,
-    DistilBertConfig,
-    ElectraConfig,
-    XLMRobertaConfig,
-    ElectraTokenizer,
-    XLMRobertaTokenizer,
-    BertForSequenceClassification,
-    DistilBertForSequenceClassification,
-    XLMRobertaForSequenceClassification,
-    BertForTokenClassification,
-    DistilBertForTokenClassification,
-    XLMRobertaForTokenClassification,
-    ElectraForTokenClassification,
-    BertForQuestionAnswering,
-    DistilBertForQuestionAnswering
-)
+from finetuning.model import ReforBertForQA
+from finetuning.tokenization_reforbert import ReforBertTokenizer
+from finetuning.config_reforBert import ReforBertConfig
+
 
 CONFIG_CLASSES = {
-    "kobert": BertConfig,
-    "distilkobert": DistilBertConfig,
-    "hanbert": BertConfig,
-    "koelectra-base": ElectraConfig,
-    "koelectra-small": ElectraConfig,
-    "xlm-roberta": XLMRobertaConfig
+    # "kobert": BertConfig,
+    "reforbert": ReforBertConfig,
 }
 
 TOKENIZER_CLASSES = {
-    "kobert": KoBertTokenizer,
-    "distilkobert": KoBertTokenizer,
-    "hanbert": HanBertTokenizer,
-    "koelectra-base": ElectraTokenizer,
-    "koelectra-small": ElectraTokenizer,
-    "xlm-roberta": XLMRobertaTokenizer
+    # "kobert": KoBertTokenizer,
+    "reforbert": ReforBertTokenizer,
 }
 
-MODEL_FOR_SEQUENCE_CLASSIFICATION = {
-    "kobert": BertForSequenceClassification,
-    "distilkobert": DistilBertForSequenceClassification,
-    "hanbert": BertForSequenceClassification,
-    "koelectra-base": ElectraForSequenceClassification,
-    "koelectra-small": ElectraForSequenceClassification,
-    "xlm-roberta": XLMRobertaForSequenceClassification
-}
-
-MODEL_FOR_TOKEN_CLASSIFICATION = {
-    "kobert": BertForTokenClassification,
-    "distilkobert": DistilBertForTokenClassification,
-    "hanbert": BertForTokenClassification,
-    "koelectra-base": ElectraForTokenClassification,
-    "koelectra-small": ElectraForTokenClassification,
-    "xlm-roberta": XLMRobertaForTokenClassification
-}
+# MODEL_FOR_SEQUENCE_CLASSIFICATION = {
+#     "kobert": BertForSequenceClassification,
+#     "reforbert": BertForSequenceClassification,
+# }
+#
+# MODEL_FOR_TOKEN_CLASSIFICATION = {
+#     "kobert": BertForTokenClassification,
+#     "reforbert": BertForTokenClassification,
+# }
 
 MODEL_FOR_QUESTION_ANSWERING = {
     "kobert": BertForQuestionAnswering,
-    "distilkobert": DistilBertForQuestionAnswering,
-    "hanbert": BertForQuestionAnswering,
-    "koelectra-base": ElectraForQuestionAnswering,
-    "koelectra-small": ElectraForQuestionAnswering,
-    "xlm-roberta": XLMRobertaForQuestionAnswering
+    "reforbert": BertForQuestionAnswering,
 }
 
 

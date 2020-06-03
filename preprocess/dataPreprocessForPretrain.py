@@ -237,7 +237,7 @@ def pretrin_collate_fn(inputs):
   return batch
 
 
-""" pretraun 데이터 로더 """
+""" pretrain 데이터 로더 """
 def build_pretrain_loader(vocab, args, epoch=0, shuffle=True):
   dataset = PretrainDataSet(vocab, args.input.format(epoch % args.count))
   if 1 < args.n_gpu and shuffle:
