@@ -29,15 +29,8 @@ from torch.utils.data import DataLoader, RandomSampler, SequentialSampler
 from torch.utils.data.distributed import DistributedSampler
 from fastprogress.fastprogress import master_bar, progress_bar
 from attrdict import AttrDict
-
-from finetuning import (
-    eval_during_train,
-    CONFIG_CLASSES,
-    TOKENIZER_CLASSES,
-    MODEL_FOR_QUESTION_ANSWERING,
-    init_logger,
-    set_seed
-)
+from finetuning.evaluate_v1_0 import eval_during_train
+from finetuning.utils import CONFIG_CLASSES,TOKENIZER_CLASSES, MODEL_FOR_QUESTION_ANSWERING, init_logger, set_seed
 
 from transformers import (
     AdamW,
@@ -417,9 +410,10 @@ def main(cli_args):
 
     # Load pretrained model and tokenizer
     # 2. 프리트레인 모델 및 토크나이저 선언
-    config = CONFIG_CLASSES[args.model_type].from_pretrained(
-        args.model_name_or_path,
-    )
+    config = CONFIG_CLASSES[args.model_type]
+    # config = config.from_pretrained(
+    #     args.model_name_or_path,
+    # )
     tokenizer = TOKENIZER_CLASSES[args.model_type].from_pretrained(
         args.model_name_or_path,
         do_lower_case=args.do_lower_case,
@@ -474,9 +468,9 @@ def main(cli_args):
 if __name__ == "__main__":
     cli_parser = argparse.ArgumentParser()
 
-    cli_parser.add_argument("--task", type=str, required=True)
-    cli_parser.add_argument("--config_dir", type=str, default="config")
-    cli_parser.add_argument("--config_file", type=str, required=True)
+    cli_parser.add_argument("--task", type=str, default="korquad")
+    cli_parser.add_argument("--config_dir", type=str, default="/Users/a60058238/Desktop/dev/workspace/ReforBERT/finetuning/config/")
+    cli_parser.add_argument("--config_file", type=str,default="reforbert.json")
 
     cli_args = cli_parser.parse_args()
 

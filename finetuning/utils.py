@@ -34,8 +34,8 @@ TOKENIZER_CLASSES = {
 # }
 
 MODEL_FOR_QUESTION_ANSWERING = {
-    "kobert": BertForQuestionAnswering,
-    "reforbert": BertForQuestionAnswering,
+    # "kobert": BertForQuestionAnswering,
+    "reforbert": ReforBertForQA,
 }
 
 

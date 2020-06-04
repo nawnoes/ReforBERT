@@ -7,9 +7,9 @@ from torch.autograd import Function
 from functools import partial, reduce, wraps
 from itertools import chain
 from operator import mul
-from ReforBERT.reformer.reversible import ReversibleSequence
-from ReforBERT.reformer.norm import ScaleNorm, PreNorm
-from ReforBERT.util.common import sort_key_val, batched_index_select, process_inputs_chunk, chunked_sum, default, max_neg_value, cache_fn, cache_method_decorator, look_around, expand_dim, merge_dims, split_at_index
+from reformer.reversible import ReversibleSequence
+from reformer.norm import ScaleNorm, PreNorm
+from util.common import sort_key_val, batched_index_select, process_inputs_chunk, chunked_sum, default, max_neg_value, cache_fn, cache_method_decorator, look_around, expand_dim, merge_dims, split_at_index
 
 
 
