@@ -8,7 +8,7 @@ import numpy as np
 from scipy.stats import pearsonr, spearmanr
 from seqeval.metrics import precision_score, recall_score, f1_score, classification_report
 
-from finetuning.model import ReforBertForQA
+from finetuning.squad_model import ReforBertForQA
 from finetuning.tokenization_reforbert import ReforBertTokenizer
 from finetuning.config_reforBert import ReforBertConfig
 

@@ -25,24 +25,28 @@ reforBERT_PRETRAINED_CONFIG_ARCHIVE_MAP = {
 
 class ReforBertConfig(PretrainedConfig):
     pretrained_config_archive_map = reforBERT_PRETRAINED_CONFIG_ARCHIVE_MAP
-    model_type = "reforBert"
+    model_type = "reforbert"
 
     def __init__(
         self,
+        num_labels = 512,
         vocab_size=8007,  # vocab 크기
-        hidden_size=768,   # 임베딩 사이즈
+        embedding_size=768,   # 임베딩 사이즈
         max_seq_len = 512,  # 최대 입력 길이
-        depth = 6,  # reformer depth
+        depth = 12,  # reformer depth
         heads = 8,  # reformer heads
+        device = 'cpu',
         causal=True,
         **kwargs
     ):
         super().__init__(**kwargs)
 
         self.vocab_size = vocab_size
-        self.hidden_size = hidden_size
+        self.embedding_size = embedding_size
         self.max_seq_len = max_seq_len
         self.depth = depth
         self.heads = heads
         self.causal = causal
+        self.num_labels = num_labels
+        self.device = device
 

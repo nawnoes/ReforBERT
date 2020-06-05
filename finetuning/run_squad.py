@@ -388,6 +388,7 @@ def load_and_cache_examples(args, tokenizer, evaluate=False, output_examples=Fal
 
 
 def main(cli_args):
+    local_dir = cli_args.local_dir
     # Read from config file and make args
     # 1. config 읽어 arg 생성
     with open(os.path.join(cli_args.config_dir, cli_args.task, cli_args.config_file)) as f:
@@ -409,19 +410,20 @@ def main(cli_args):
     logging.getLogger("transformers.data.metrics.squad_metrics").setLevel(logging.WARN)  # Reduce model loading logs
 
     # Load pretrained model and tokenizer
-    # 2. 프리트레인 모델 및 토크나이저 선언
-    config = CONFIG_CLASSES[args.model_type]
-    # config = config.from_pretrained(
-    #     args.model_name_or_path,
-    # )
-    tokenizer = TOKENIZER_CLASSES[args.model_type].from_pretrained(
-        args.model_name_or_path,
-        do_lower_case=args.do_lower_case,
-    )
-    model = MODEL_FOR_QUESTION_ANSWERING[args.model_type].from_pretrained(
-        args.model_name_or_path,
-        config=config,
-    )
+    # config 불러오기
+    config = CONFIG_CLASSES[args.model_type]()
+
+    # vocab 및 토크나이저 설정
+    vocab_dir = local_dir + '/data/vocab/'
+    vocab_file = vocab_dir + args.vocab_model
+    vocab_txt = vocab_dir + args.vocab_txt
+    tokenizer = TOKENIZER_CLASSES[args.model_type](vocab_file = vocab_file, vocab_txt = vocab_txt)
+
+    # 프리트레인 모델 불러오기
+    pretrained_model_path = local_dir + args.pretrain_model_path
+    model = MODEL_FOR_QUESTION_ANSWERING[args.model_type](config)
+    model.from_pretrained(pretrained_model_path=pretrained_model_path)
+
     # GPU or CPU
     args.device = "cuda" if torch.cuda.is_available() and not args.no_cuda else "cpu"
     model.to(args.device)
@@ -469,6 +471,7 @@ if __name__ == "__main__":
     cli_parser = argparse.ArgumentParser()
 
     cli_parser.add_argument("--task", type=str, default="korquad")
+    cli_parser.add_argument("--local_dir", type=str, default="/Users/a60058238/Desktop/dev/workspace/ReforBERT")
     cli_parser.add_argument("--config_dir", type=str, default="/Users/a60058238/Desktop/dev/workspace/ReforBERT/finetuning/config/")
     cli_parser.add_argument("--config_file", type=str,default="reforbert.json")
 

@@ -843,4 +843,4 @@ class ReforBertLM(nn.Module):
         # print("logits LM: ", logits_lm.size())
 
 
-        return logits_cls, logits_lm
+        return outputs, logits_cls, logits_lm

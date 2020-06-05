@@ -68,8 +68,8 @@ def train_epoch(device, epoch, model, criterion_lm, criterion_cls, optimizer, tr
             labels_cls, labels_lm, inputs, segments = map(lambda v: v.to(device), value)
 
             optimizer.zero_grad()
-            outputs = model(inputs, segments)
-            logits_cls, logits_lm = outputs[0], outputs[1]
+            outputs, logits_cls, logits_lm = model(inputs, segments)
+
 
             loss_cls = criterion_cls(logits_cls, labels_cls)
             loss_lm = criterion_lm(logits_lm.view(-1, logits_lm.size(2)), labels_lm.view(-1))

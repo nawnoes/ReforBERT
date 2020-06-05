@@ -1,30 +1,27 @@
+import os
+import torch
 import torch.nn as nn
 from torch.nn import CrossEntropyLoss, MSELoss
 from reformer.model import ReforBertLM, Reformer
 
 class ReforBertForQA(nn.Module):
-    def __init__(self, config):
-        super(ReforBertForQA, self)
-
-        vocab_size = 8007     # vocab 크기
-        max_seq_len = 512     # 최대 입력 길이
-        embedding_size = 768  # 임베딩 사이
-        batch_size = 128      # 학습 시 배치 크기
-        depth = 6             # reformer depth
-        heads = 8             # reformer heads
-        device ="cpu"         # cpu or cuda
-
-
+    def __init__( self, config):
+        super().__init__()
         self.num_labels = config.num_labels
         self.reforBert = ReforBertLM(
-                            num_tokens=vocab_size,
-                            dim=embedding_size,
-                            depth=depth,
-                            heads=heads,
-                            max_seq_len=max_seq_len,
+                            num_tokens= config.vocab_size,
+                            dim= config.embedding_size,
+                            depth= config.depth,
+                            heads= config.heads,
+                            max_seq_len= config.max_seq_len,
                             causal=True ) # model(inputs, segments)
+        self.device = torch.device(config.device)
+        self.qa_output = nn.Linear(config.embedding_size, config.num_labels)
 
-        self.qa_output = nn.Linear(embedding_size, self.num_labels)
+    def from_pretrained(self, pretrained_model_path):
+        if os.path.isfile(pretrained_model_path):
+            checkpoint = torch.load(pretrained_model_path, map_location=self.device)
+            self.reforBert.load_state_dict(checkpoint['model_state_dict'])
 
     def forward(
                 self,
@@ -32,10 +29,10 @@ class ReforBertForQA(nn.Module):
                 segments_ids = None
                 ):
         # 1. reforBert에 대한 입력
-        outputs = self.reforBert(input_ids,segments_ids)
+        outputs, _, _ = self.reforBert(input_ids,segments_ids)
 
         # 2. reforBert 출력에 대해 classification 위해 Linear 레이어 통과
-        logits = self.qa_outputs(sequence_output)
+        logits = self.qa_outputs(outputs)
 
         # 3. start logits, end_logits 구하기
         start_logits, end_logits = logits.split(1, dim=-1)
