@@ -326,7 +326,7 @@ def evaluate(args, model, tokenizer, prefix="", global_step=None):
 
 def load_and_cache_examples(args, tokenizer, evaluate=False, output_examples=False):
     # Load data features from cache or dataset file
-    input_dir = args.data_dir if args.data_dir else "."
+    input_dir = args.cache_dir if args.cache_dir else "."
     cached_features_file = os.path.join(
         input_dir,
         "cached_{}_{}_{}".format(
@@ -386,7 +386,48 @@ def load_and_cache_examples(args, tokenizer, evaluate=False, output_examples=Fal
         return dataset, examples, features
     return dataset
 
+def load_examples(args, tokenizer, evaluate=False, output_examples=False):
+    # Load data features from dataset file
 
+    # logger.info("Creating features from dataset file at %s", )
+
+    if not args.data_dir and ((evaluate and not args.predict_file) or (not evaluate and not args.train_file)):
+        try:
+            import tensorflow_datasets as tfds
+        except ImportError:
+            raise ImportError("If not data_dir is specified, tensorflow_datasets needs to be installed.")
+
+        if args.version_2_with_negative:
+            logger.warn("tensorflow_datasets does not handle version 2 of SQuAD.")
+
+        tfds_examples = tfds.load("squad")
+        examples = SquadV1Processor().get_examples_from_dataset(tfds_examples, evaluate=evaluate)
+    else:
+        processor = SquadV2Processor() if args.version_2_with_negative else SquadV1Processor()
+        if evaluate:
+            examples = processor.get_dev_examples(os.path.join(args.data_dir, args.task),
+                                                  filename=args.predict_file)
+        else:
+            examples = processor.get_train_examples(os.path.join(args.data_dir, args.task),
+                                                    filename=args.train_file)
+
+    features, dataset = squad_convert_examples_to_features(
+        examples=examples,
+        tokenizer=tokenizer,
+        max_seq_length=args.max_seq_length,
+        doc_stride=args.doc_stride,
+        max_query_length=args.max_query_length,
+        is_training=not evaluate,
+        return_dataset="pt",
+        threads=args.threads,
+    )
+
+    # logger.info("Saving features into cached file %s", cached_features_file)
+    torch.save({"features": features, "dataset": dataset, "examples": examples}, cached_features_file)
+
+    if output_examples:
+        return dataset, examples, features
+    return dataset
 def main(cli_args):
     local_dir = cli_args.local_dir
     # Read from config file and make args
@@ -433,6 +474,7 @@ def main(cli_args):
     # Training
     if args.do_train:
         train_dataset = load_and_cache_examples(args, tokenizer, evaluate=False, output_examples=False)
+        # train_dataset = load_examples(args, tokenizer, evaluate=False, output_examples=False)
         global_step, tr_loss = train(args, train_dataset, model, tokenizer)
         logger.info(" global_step = %s, average loss = %s", global_step, tr_loss)
 

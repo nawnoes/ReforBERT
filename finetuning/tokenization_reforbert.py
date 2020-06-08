@@ -58,7 +58,7 @@ class ReforBertTokenizer(PreTrainedTokenizer):
         self.idx2token = []
         with open(vocab_txt, 'r', encoding='utf-8') as f:
             for idx, token in enumerate(f):
-                token = token.strip()
+                token = token.split('\t')[0].strip()
                 self.token2idx[token] = idx
                 self.idx2token.append(token)
 
