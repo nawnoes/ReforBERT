@@ -151,6 +151,9 @@ def train(args, train_dataset, model, tokenizer):
                     inputs.update(
                         {"langs": (torch.ones(batch[0].shape, dtype=torch.int64) * args.lang_id).to(args.device)}
                     )
+             # reforbert인 경우
+            if args.model_type in ["reforbert"]:
+                del inputs["attention_mask"]
 
             outputs = model(**inputs)
             # model outputs are always tuple in transformers (see doc)

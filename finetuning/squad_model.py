@@ -16,7 +16,7 @@ class ReforBertForQA(nn.Module):
                             max_seq_len= config.max_seq_len,
                             causal=True ) # model(inputs, segments)
         self.device = torch.device(config.device)
-        self.qa_output = nn.Linear(config.embedding_size, config.num_labels)
+        self.qa_outputs = nn.Linear(config.embedding_size, 2)
 
     def from_pretrained(self, pretrained_model_path):
         if os.path.isfile(pretrained_model_path):
@@ -26,10 +26,12 @@ class ReforBertForQA(nn.Module):
     def forward(
                 self,
                 input_ids=None,
-                segments_ids = None
+                token_type_ids = None, # 세그멘트 id
+                start_positions=None,
+                end_positions=None,
                 ):
         # 1. reforBert에 대한 입력
-        outputs, _, _ = self.reforBert(input_ids,segments_ids)
+        outputs, _, _ = self.reforBert(input_ids,token_type_ids)
 
         # 2. reforBert 출력에 대해 classification 위해 Linear 레이어 통과
         logits = self.qa_outputs(outputs)
@@ -39,7 +41,9 @@ class ReforBertForQA(nn.Module):
         start_logits = start_logits.squeeze(-1)
         end_logits = end_logits.squeeze(-1)
 
-        outputs = (start_logits, end_logits,) + outputs[1:]
+        # (start_logits, end_logits,) #+ outputs[1:]
+        # 에러 발생 reforbert에서 출력결과가 튜플이 아니라서 발생
+        outputs = (start_logits, end_logits,) #+ outputs[1:]
         if start_positions is not None and end_positions is not None:
 
             # If we are on multi-GPU, split add a dimension

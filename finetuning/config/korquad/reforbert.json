@@ -1,6 +1,6 @@
 {
   "task": "korquad",
-  "data_dir": "data",
+  "data_dir": "/Users/a60058238/Desktop/dev/workspace/ReforBERT/finetuning/data",
   "ckpt_dir": "checkpoint",
   "train_file": "KorQuAD_v1.0_train.json",
   "predict_file": "KorQuAD_v1.0_dev.json",
@@ -29,7 +29,7 @@
   "max_grad_norm": 1.0,
   "no_cuda": false,
   "model_type": "reforbert",
-  "model_name_or_path": "",
+  "model_name_or_path": "reforbert",
   "output_dir": "reforbert-korquad-ckpt",
   "checkpoint_path": "/checkpoint",
   "pretrain_file_name": "reforbert-pretrain-model.pth",
@@ -41,5 +41,6 @@
   "eval_batch_size": 64,
   "logging_steps": 1000,
   "save_steps": 1000,
-  "learning_rate": 5e-5
+  "learning_rate": 5e-5,
+  "cache_dir": "/Users/a60058238/Desktop/dev/workspace/ReforBERT/finetuning/data"
 }
