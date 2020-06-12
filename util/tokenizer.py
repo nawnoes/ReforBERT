@@ -1,4 +1,4 @@
-from ReforBERT.util.common import download
+from util.common import download
 
 tokenizer = {
     'url':

@@ -13,8 +13,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-""" Finetuning the library models for question-answering on SQuAD (DistilBERT, Bert, XLM, XLNet)."""
+import sys
+sys.path.append('drive/My Drive/Colab Notebooks/ReforBERT')
 
+""" Finetuning the library models for question-answering on SQuAD (DistilBERT, Bert, XLM, XLNet)."""
 import argparse
 import json
 import glob
@@ -245,6 +247,9 @@ def evaluate(args, model, tokenizer, prefix="", global_step=None):
             if args.model_type in ["xlm", "roberta", "distilbert", "distilkobert", "xlm-roberta"]:
                 del inputs["token_type_ids"]
 
+            # reforbert인 경우
+            if args.model_type in ["reforbert"]:
+                del inputs["attention_mask"]
             example_indices = batch[3]
 
             outputs = model(**inputs)

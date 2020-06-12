@@ -745,6 +745,19 @@ class BERTPretrain(nn.Module):
         # (bs, n_enc_vocab), (bs, n_enc_seq, n_enc_vocab), [(bs, n_head, n_enc_seq, n_enc_seq)]
         return logits_cls, logits_lm, attn_probs
 
+class reforBertPooler(nn.Module):
+    def __init__(self, hidden_size):
+        super().__init__()
+        self.dense = nn.Linear(hidden_size, hidden_size)
+        self.activation = nn.Tanh()
+
+    def forward(self, hidden_states):
+        # We "pool" the model by simply taking the hidden state corresponding
+        # to the first token.
+        first_token_tensor = hidden_states[:, 0]
+        pooled_output = self.dense(first_token_tensor)
+        pooled_output = self.activation(pooled_output)
+        return pooled_output
 
 class ReforBertLM(nn.Module):
     """
@@ -791,7 +804,7 @@ class ReforBertLM(nn.Module):
 
         emb_dim = default(emb_dim, dim)
 
-        self.embedding_dim = dim
+        self.embedding_dim = emb_dim
         self.max_seq_len = max_seq_len
 
         self.enc_emb = nn.Embedding(num_tokens, self.embedding_dim)
@@ -801,11 +814,9 @@ class ReforBertLM(nn.Module):
         self.reformer = Reformer(dim, depth, max_seq_len, heads = heads, bucket_size = bucket_size, n_hashes = n_hashes, ff_chunks = ff_chunks, attn_chunks = attn_chunks, causal = causal, weight_tie = weight_tie, lsh_dropout = lsh_dropout, ff_mult = ff_mult, ff_activation = ff_activation, ff_glu = ff_glu, ff_dropout = ff_dropout, post_attn_dropout = 0., layer_dropout = layer_dropout, random_rotations_per_head = random_rotations_per_head, twin_attention = twin_attention, use_scale_norm = use_scale_norm, use_rezero = use_rezero, use_full_attn = use_full_attn, full_attn_thres = full_attn_thres, reverse_thres = reverse_thres, num_mem_kv = num_mem_kv, one_value_head = one_value_head, n_local_attn_heads = n_local_attn_heads)
 
         # for NSP
-        self.linear = nn.Linear(self.embedding_dim, self.embedding_dim)
-        self.activation = torch.tanh
-
-        # classfier
+        self.pooler = reforBertPooler(self.embedding_dim)
         self.projection_cls = nn.Linear(self.embedding_dim, 2, bias=False)
+
         # lm
         # self.projection_lm = nn.Linear(self.embedding_dim, num_tokens, bias=False)
         # self.projection_lm.weight = self.enc_emb.weight
@@ -830,14 +841,11 @@ class ReforBertLM(nn.Module):
         outputs = self.reformer(bert_inputs)
 
         # NSP용 cls
-        outputs_cls = outputs[:, 0].contiguous()
-        outputs_cls = self.linear(outputs_cls)
-        outputs_cls = self.activation(outputs_cls)
+        pooled_output = self.pooler(outputs)
+        logits_cls = self.projection_cls(pooled_output) # (bs, 2)
 
-        # (bs, 2)
-        logits_cls = self.projection_cls(outputs_cls)
-        # (bs, n_enc_seq, n_enc_vocab)
-        logits_lm = self.projection_lm(outputs)
+        #MLM
+        logits_lm = self.projection_lm(outputs) # (bs, n_enc_seq, n_enc_vocab)
 
         # print("logits Classification: ", logits_cls.size())
         # print("logits LM: ", logits_lm.size())

@@ -1,5 +1,5 @@
-from ReforBERT.util.common import download
-from ReforBERT.util.tokenizer import tokenizer
+from util.common import download
+from util.tokenizer import tokenizer
 
 import sentencepiece as spm
 import gluonnlp as nlp

@@ -18,10 +18,10 @@ import torch.nn as nn
 import torch.distributed as dist
 from torch.utils.data import dataloader
 
-from ReforBERT.reformer.model import ReforBertLM,ReformerLM
-from ReforBERT.dataloader.kowiki import PretrainDataSet, pretrin_collate_fn
-from ReforBERT.util.vocab import load_vocab
-from ReforBERT.util.common import Config
+from reformer.model import ReforBertLM, ReformerLM
+from dataloader.kowiki import PretrainDataSet, pretrin_collate_fn
+from util.vocab import load_vocab
+
 
 
 
@@ -100,10 +100,10 @@ def train_epoch(device, epoch, model, criterion_lm, criterion_cls, optimizer, tr
 
 if __name__ == '__main__':
     # Data 및 Vocab 경로
-    data_path = "../../Data/kowiki"
+    data_path = "/Users/a60058238/Desktop/dev/workspace/ReforBERT/data/kowiki"
     checkpoint_path ="../checkpoint"
     save_pretrain = f"{checkpoint_path}/save_reforBERT_pretrain.pth"
-    vocab_path = "../../Data/kowiki/kowiki.model"
+    vocab_path = "/Users/a60058238/Desktop/dev/workspace/ReforBERT/data/kowiki/kowiki.model"
 
     vocab = spm.SentencePieceProcessor()
     vocab = load_vocab(vocab_path)
@@ -117,7 +117,7 @@ if __name__ == '__main__':
     vocab_size = 8007     # vocab 크기
     max_seq_len = 512     # 최대 입력 길이
     embedding_size = 768  # 임베딩 사이
-    batch_size = 128      # 학습 시 배치 크기
+    batch_size = 1      # 학습 시 배치 크기
     depth = 6             # reformer depth
     heads = 8             # reformer heads
 

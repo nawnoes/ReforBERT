@@ -29,7 +29,7 @@ class ReforBertConfig(PretrainedConfig):
 
     def __init__(
         self,
-        num_labels = 512,
+        num_labels = 2,
         vocab_size=8007,  # vocab 크기
         embedding_size=768,   # 임베딩 사이즈
         max_seq_len = 512,  # 최대 입력 길이
