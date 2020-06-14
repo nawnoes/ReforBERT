@@ -258,7 +258,7 @@ if __name__ == '__main__':
                       help="output json file")
   parser.add_argument("--count", default=10, type=int, required=False,
                       help="count of pretrain data")
-  parser.add_argument("--n_seq", default=256, type=int, required=False,
+  parser.add_argument("--n_seq", default=512, type=int, required=False,
                       help="sequence length")
   parser.add_argument("--vocab", default="../../Data/kowiki/kowiki.model", type=str, required=False,
                       help="vocab file")

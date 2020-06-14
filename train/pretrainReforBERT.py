@@ -102,7 +102,7 @@ if __name__ == '__main__':
     # Data 및 Vocab 경로
     data_path = "/Users/a60058238/Desktop/dev/workspace/ReforBERT/data/kowiki"
     checkpoint_path ="../checkpoint"
-    save_pretrain = f"{checkpoint_path}/save_reforBERT_pretrain.pth"
+    save_pretrain = f"{checkpoint_path}/reforbert-pretrain-model.pth"
     vocab_path = "/Users/a60058238/Desktop/dev/workspace/ReforBERT/data/kowiki/kowiki.model"
 
     vocab = spm.SentencePieceProcessor()
@@ -117,7 +117,7 @@ if __name__ == '__main__':
     vocab_size = 8007     # vocab 크기
     max_seq_len = 512     # 최대 입력 길이
     embedding_size = 768  # 임베딩 사이
-    batch_size = 1      # 학습 시 배치 크기
+    batch_size = 32      # 학습 시 배치 크기
     depth = 6             # reformer depth
     heads = 8             # reformer heads
 
@@ -145,7 +145,8 @@ if __name__ == '__main__':
 
     best_epoch, best_loss, train_step = 0, 0, 0
     if os.path.isfile(save_pretrain):
-        checkpoint = torch.load(save_pretrain)
+        device = torch.device('cpu')
+        checkpoint = torch.load(save_pretrain, map_location=device)
         best_epoch = checkpoint['epoch']
         best_loss = checkpoint['loss']
         train_step =  checkpoint['train_step']
