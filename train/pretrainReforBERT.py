@@ -124,7 +124,7 @@ if __name__ == '__main__':
     train_save_step = 100 # 학습 저장 주기
 
     # pretrain 데이터 로더
-    dataset = PretrainDataSet(vocab, f"{data_path}/kowiki_bert_test.json")
+    dataset = PretrainDataSet(vocab, f"{data_path}/kowiki_bert_512_0.json")
     train_loader = torch.utils.data.DataLoader(dataset, batch_size=batch_size, shuffle=True,
                                                collate_fn=pretrin_collate_fn)
 
@@ -164,7 +164,7 @@ if __name__ == '__main__':
         epoch = step + offset
         if 0 < step:
             del train_loader
-            dataset = PretrainDataSet(vocab, f"{data_path}/kowiki_bert_{epoch % count}.json")
+            dataset = PretrainDataSet(vocab, f"{data_path}/kowiki_bert_512_{epoch % count}.json")
             train_loader = torch.utils.data.DataLoader(dataset, batch_size=batch_size, shuffle=True,
                                                        collate_fn=pretrin_collate_fn)
             train_step = 0

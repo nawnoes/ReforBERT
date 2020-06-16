@@ -70,6 +70,52 @@ def trim_tokens(tokens_a, tokens_b, max_seq):
     else:
       tokens_b.pop()
 
+""" pretrain 테스트 데이터 생성 """
+def make_pretrain_test_data(args):
+  # Vocab
+  vocab = load_vocab(args.vocab)
+
+  vocab_list = []
+  for id in range(vocab.get_piece_size()):
+    if not vocab.is_unknown(id):
+      vocab_list.append(vocab.id_to_piece(id))
+
+  # 전체 데이터가 몇 라인인지 확인
+  line_cnt = 0
+  with open(args.input, "r") as in_f:
+    for line in in_f:
+      line_cnt += 1
+
+  # 데이터를 한줄씩 읽고 토큰화 한다.
+  # 그 후 doc단위로 docs를 생성한다.
+  docs = []
+  with open(args.input, "r") as f:
+    doc = []
+    for i, line in enumerate(tqdm(f, total=line_cnt, desc=f"Loading {args.input}", unit=" lines")):
+      line = line.strip()
+      if line == "":
+        if 0 < len(doc):
+          docs.append(doc)
+          doc = []
+      else:
+        pieces = vocab.encode_as_pieces(line)
+        if 0 < len(pieces):
+          doc.append(pieces)
+    if doc:
+      docs.append(doc)
+
+  # args count만큼 데이터를 분할한다.
+  #
+  for index in range(args.count):
+    output = args.output.format(index)
+    if os.path.isfile(output): continue
+
+    with open(output, "w") as out_f:
+      for i, doc in enumerate(tqdm(docs, desc=f"Making {output}", unit=" lines")):
+        instances = create_pretrain_instances(docs, i, doc, args.n_seq, args.mask_prob, vocab_list)
+        for instance in instances:
+          out_f.write(json.dumps(instance))
+          out_f.write("\n")
 
 """ pretrain 데이터 생성 """
 def create_pretrain_instances(docs, doc_idx, doc, n_seq, mask_prob, vocab_list):
@@ -252,15 +298,15 @@ def build_pretrain_loader(vocab, args, epoch=0, shuffle=True):
 
 if __name__ == '__main__':
   parser = argparse.ArgumentParser()
-  parser.add_argument("--input", default="../../Data/kowiki/kowiki.txt", type=str, required=False,
+  parser.add_argument("--input", default="../data/kowiki/kowiki.txt", type=str, required=False,
                       help="input text file")
-  parser.add_argument("--output", default="../../Data/kowiki/kowiki_bert_{}.json", type=str, required=False,
+  parser.add_argument("--output", default="../data/kowiki/kowiki_bert_512_{}.json", type=str, required=False,
                       help="output json file")
   parser.add_argument("--count", default=10, type=int, required=False,
                       help="count of pretrain data")
   parser.add_argument("--n_seq", default=512, type=int, required=False,
                       help="sequence length")
-  parser.add_argument("--vocab", default="../../Data/kowiki/kowiki.model", type=str, required=False,
+  parser.add_argument("--vocab", default="../data/kowiki/kowiki.model", type=str, required=False,
                       help="vocab file")
   parser.add_argument("--mask_prob", default=0.15, type=float, required=False,
                       help="probility of mask")
@@ -271,9 +317,9 @@ if __name__ == '__main__':
     pretrain 데이터 생성
     args:
     in_file = "<path of data>/kowiki.txt"
-    out_file = "<path of data>/kowiki_bert_{}.json"
+    out_file = "<path of data>/kowiki_data_bert_pretrain_{}.json"
     count = 10
-    n_seq = 256
+    n_seq = 512
     mask_prob = 0.15
     """
     make_pretrain_data(args)
