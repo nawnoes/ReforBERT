@@ -386,7 +386,6 @@ def load_and_cache_examples(args, tokenizer, evaluate=False, output_examples=Fal
             return_dataset="pt",
             threads=args.threads,
         )
-
         logger.info("Saving features into cached file %s", cached_features_file)
         torch.save({"features": features, "dataset": dataset, "examples": examples}, cached_features_file)
 
@@ -431,7 +430,7 @@ def load_examples(args, tokenizer, evaluate=False, output_examples=False):
     )
 
     # logger.info("Saving features into cached file %s", cached_features_file)
-    torch.save({"features": features, "dataset": dataset, "examples": examples}, cached_features_file)
+    torch.save({"features": features, "dataset": dataset, "examples": examples})
 
     if output_examples:
         return dataset, examples, features
