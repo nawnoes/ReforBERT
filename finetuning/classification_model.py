@@ -46,8 +46,6 @@ class ReforBertForSequenceClassification(nn.Module):
                 self,
                 input_ids=None,
                 token_type_ids = None, # 세그멘트 id
-                start_positions=None,
-                end_positions=None,
                 labels=None,
     ):
         # 1. reforBert에 대한 입력

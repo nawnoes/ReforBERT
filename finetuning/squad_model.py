@@ -4,6 +4,9 @@ import torch.nn as nn
 from torch.nn import CrossEntropyLoss, MSELoss
 from reformer.model import ReforBertLM, Reformer
 
+BertLayerNorm = nn.LayerNorm
+
+
 class ReforBertForQA(nn.Module):
     def __init__( self, config):
         super().__init__()
@@ -17,6 +20,19 @@ class ReforBertForQA(nn.Module):
                             causal=True ) # model(inputs, segments)
         self.device = torch.device(config.device)
         self.qa_outputs = nn.Linear(config.embedding_size, 2)
+        self.init_weights()
+
+    def _init_weights(self, module):
+        """ Initialize the weights """
+        if isinstance(module, (nn.Linear, nn.Embedding)):
+            # Slightly different from the TF version which uses truncated_normal for initialization
+            # cf https://github.com/pytorch/pytorch/pull/5617
+            module.weight.data.normal_(mean=0.0, std=self.config.initializer_range)
+        elif isinstance(module, BertLayerNorm):
+            module.bias.data.zero_()
+            module.weight.data.fill_(1.0)
+        if isinstance(module, nn.Linear) and module.bias is not None:
+            module.bias.data.zero_()
 
     def from_pretrained(self, pretrained_model_path):
         if os.path.isfile(pretrained_model_path):
