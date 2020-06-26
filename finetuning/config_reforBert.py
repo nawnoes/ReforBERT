@@ -19,12 +19,12 @@ from transformers.configuration_utils import PretrainedConfig
 
 logger = logging.getLogger(__name__)
 
-reforBERT_PRETRAINED_CONFIG_ARCHIVE_MAP = {
+REFORBERT_PRETRAINED_CONFIG_ARCHIVE_MAP = {
     "reforBert-base": "./config/reforBert-config.json",
 }
 
 class ReforBertConfig(PretrainedConfig):
-    pretrained_config_archive_map = reforBERT_PRETRAINED_CONFIG_ARCHIVE_MAP
+    pretrained_config_archive_map = REFORBERT_PRETRAINED_CONFIG_ARCHIVE_MAP
     model_type = "reforbert"
 
     def __init__(
@@ -37,6 +37,8 @@ class ReforBertConfig(PretrainedConfig):
         heads = 8,  # reformer heads
         device = 'cpu',
         causal=True,
+        initializer_range=0.02,
+        layer_norm_eps=1e-12,
         **kwargs
     ):
         super().__init__(**kwargs)
@@ -49,4 +51,6 @@ class ReforBertConfig(PretrainedConfig):
         self.causal = causal
         self.num_labels = num_labels
         self.device = device
+        self.initializer_range = initializer_range
+        self.layer_norm_eps = layer_norm_eps
 

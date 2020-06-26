@@ -35,7 +35,7 @@
   "pretrain_file_name": "reforbert-pretrain-model.pth",
   "vocab_txt": "kowiki.vocab",
   "vocab_model": "kowiki.model",
-  "pretrain_model_path": "/checkpoint/save_reforBERT_pretrain.pth",
+  "pretrain_model_path": "/checkpoint/pretrained_reforbert.pth",
   "seed": 42,
   "train_batch_size": 32,
   "eval_batch_size": 64,
