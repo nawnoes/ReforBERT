@@ -39,9 +39,8 @@ class ReforBertConfig(PretrainedConfig):
         causal=True,
         initializer_range=0.02,
         layer_norm_eps=1e-12,
-        **kwargs
     ):
-        super().__init__(**kwargs)
+        super().__init__()
 
         self.vocab_size = vocab_size
         self.embedding_size = embedding_size
