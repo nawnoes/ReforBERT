@@ -54,6 +54,7 @@ def train_epoch(device, epoch, model, criterion_lm, criterion_cls, optimizer, tr
     model.train()
 
     with tqdm(total= total_train_step, desc=f"Train({epoch})") as pbar:
+        pbar.update(train_start_index)
         for i, value in enumerate(train_loader, train_start_index):
             if i >= total_train_step:
                 torch.save({
@@ -100,25 +101,28 @@ def train_epoch(device, epoch, model, criterion_lm, criterion_cls, optimizer, tr
 
 if __name__ == '__main__':
     # Data 및 Vocab 경로
-    data_path = "/Users/a60058238/Desktop/dev/workspace/ReforBERT/data/kowiki"
-    checkpoint_path ="../checkpoint"
-    save_pretrain = f"{checkpoint_path}/reforbert-pretrain-model.pth"
-    vocab_path = "/Users/a60058238/Desktop/dev/workspace/ReforBERT/data/kowiki/kowiki.model"
+    root_path = "../"
+    working_dir = "/ReforBERT"
+    data_path = root_path+"data/kowiki"
+    checkpoint_path =root_path+"checkpoint"
+    save_pretrain = f"{checkpoint_path}/reforbert-pretrain-model-base.pth"
+    vocab_path = root_path+"ReforBERT/data/kowiki/kowiki.model"
 
     vocab = spm.SentencePieceProcessor()
     vocab = load_vocab(vocab_path)
 
     count = 10            # 학습 데이터 분할 크기 kowiki_bert_{}.json
     learning_rate = 5e-5  # Learning Rate
-    n_epoch = 20          # Num of Epoch
+    n_epoch = 20 * 10          # Num of Epoch
     batch_size = 128      # 배치 사이즈
-    device ="cpu"         # cpu or cuda
+    ctx = "cuda" if torch.cuda.is_available() else "cpu"
+    device = torch.device(ctx)
 
     vocab_size = 8007     # vocab 크기
     max_seq_len = 512     # 최대 입력 길이
     embedding_size = 768  # 임베딩 사이
     batch_size = 32      # 학습 시 배치 크기
-    depth = 6             # reformer depth
+    depth = 12             # reformer depth
     heads = 8             # reformer heads
 
     train_save_step = 100 # 학습 저장 주기
