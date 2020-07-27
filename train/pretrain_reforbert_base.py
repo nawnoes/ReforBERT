@@ -1,20 +1,15 @@
+import sys
+sys.path.append('../')
 import os
-import json
-import logging
 import numpy as np
-from datetime import datetime
-import math
-from random import random, randrange, randint, shuffle, choice
+from random import random
 import matplotlib.pyplot as plt
-import json
 import pandas as pd
 from IPython.display import display
-from tqdm import tqdm, tqdm_notebook, trange
+from tqdm import tqdm
 import sentencepiece as spm
-import wget
 
 import torch
-import torch.nn as nn
 import torch.distributed as dist
 from torch.utils.data import dataloader
 
@@ -106,14 +101,14 @@ if __name__ == '__main__':
     data_path = root_path+"data/kowiki"
     checkpoint_path =root_path+"checkpoint"
     save_pretrain = f"{checkpoint_path}/reforbert-pretrain-model-base.pth"
-    vocab_path = root_path+"ReforBERT/data/kowiki/kowiki.model"
+    vocab_path = root_path+"/data/kowiki/kowiki.model"
 
     vocab = spm.SentencePieceProcessor()
     vocab = load_vocab(vocab_path)
 
-    count = 10            # 학습 데이터 분할 크기 kowiki_bert_{}.json
+    count = 1            # 학습 데이터 분할 크기 kowiki_bert_{}.json
     learning_rate = 5e-5  # Learning Rate
-    n_epoch = 20 * 10          # Num of Epoch
+    n_epoch = 20          # Num of Epoch
     batch_size = 128      # 배치 사이즈
     ctx = "cuda" if torch.cuda.is_available() else "cpu"
     device = torch.device(ctx)

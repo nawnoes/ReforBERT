@@ -3,7 +3,6 @@ ReforBert 학습을 위한 한국어 bert pretrain 데이터 생성
 references by https://github.com/paul-hyun/transformer-evolution/blob/master/bert/data.py
 """
 import sys
-
 sys.path.append("..")
 import os, argparse, datetime, time, re, collections
 from tqdm import tqdm, trange
@@ -82,14 +81,14 @@ def make_pretrain_test_data(args):
 
   # 전체 데이터가 몇 라인인지 확인
   line_cnt = 0
-  with open(args.input, "r") as in_f:
+  with open(args.input, "r", encoding="utf-8") as in_f:
     for line in in_f:
       line_cnt += 1
 
   # 데이터를 한줄씩 읽고 토큰화 한다.
   # 그 후 doc단위로 docs를 생성한다.
   docs = []
-  with open(args.input, "r") as f:
+  with open(args.input, "r", encoding="utf-8") as f:
     doc = []
     for i, line in enumerate(tqdm(f, total=line_cnt, desc=f"Loading {args.input}", unit=" lines")):
       line = line.strip()
@@ -110,7 +109,7 @@ def make_pretrain_test_data(args):
     output = args.output.format(index)
     if os.path.isfile(output): continue
 
-    with open(output, "w") as out_f:
+    with open(output, "w", encoding="utf-8") as out_f:
       for i, doc in enumerate(tqdm(docs, desc=f"Making {output}", unit=" lines")):
         instances = create_pretrain_instances(docs, i, doc, args.n_seq, args.mask_prob, vocab_list)
         for instance in instances:
@@ -190,14 +189,14 @@ def make_pretrain_data(args):
 
   # 전체 데이터가 몇 라인인지 확인
   line_cnt = 0
-  with open(args.input, "r") as in_f:
+  with open(args.input, "r", encoding="utf-8") as in_f:
     for line in in_f:
       line_cnt += 1
 
   # 데이터를 한줄씩 읽고 토큰화 한다.
   # 그 후 doc단위로 docs를 생성한다.
   docs = []
-  with open(args.input, "r") as f:
+  with open(args.input, "r", encoding="utf-8") as f:
     doc = []
     for i, line in enumerate(tqdm(f, total=line_cnt, desc=f"Loading {args.input}", unit=" lines")):
       line = line.strip()
@@ -218,7 +217,7 @@ def make_pretrain_data(args):
     output = args.output.format(index)
     if os.path.isfile(output): continue
 
-    with open(output, "w") as out_f:
+    with open(output, "w", encoding="utf-8") as out_f:
       for i, doc in enumerate(tqdm(docs, desc=f"Making {output}", unit=" lines")):
         instances = create_pretrain_instances(docs, i, doc, args.n_seq, args.mask_prob, vocab_list)
         for instance in instances:
@@ -236,11 +235,11 @@ class PretrainDataSet(torch.utils.data.Dataset):
     self.segments = []
 
     line_cnt = 0
-    with open(infile, "r") as f:
+    with open(infile, "r", encoding="utf-8") as f:
       for line in f:
         line_cnt += 1
 
-    with open(infile, "r") as f:
+    with open(infile, "r", encoding="utf-8") as f:
       for i, line in enumerate(tqdm(f, total=line_cnt, desc=f"Loading {infile}", unit=" lines")):
         instance = json.loads(line)
         self.labels_cls.append(instance["is_next"])
@@ -302,7 +301,7 @@ if __name__ == '__main__':
                       help="input text file")
   parser.add_argument("--output", default="../data/kowiki/kowiki_bert_512_{}.json", type=str, required=False,
                       help="output json file")
-  parser.add_argument("--count", default=10, type=int, required=False,
+  parser.add_argument("--count", default=1, type=int, required=False,
                       help="count of pretrain data")
   parser.add_argument("--n_seq", default=512, type=int, required=False,
                       help="sequence length")
