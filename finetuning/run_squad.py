@@ -468,6 +468,7 @@ def main(cli_args):
     tokenizer = TOKENIZER_CLASSES[args.model_type](vocab_file = vocab_file, vocab_txt = vocab_txt)
 
     # 프리트레인 모델 불러오기
+    config.device = "cuda" if torch.cuda.is_available() else "cpu"
     pretrained_model_path = local_dir + args.pretrain_model_path
     model = MODEL_FOR_QUESTION_ANSWERING[args.model_type](config)
     model.from_pretrained(pretrained_model_path=pretrained_model_path)

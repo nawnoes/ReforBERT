@@ -10,6 +10,7 @@ class ReforBertForQA(ReforBertPreTrainedModel):
     def __init__( self, config):
         super().__init__(config)
         self.num_labels = config.num_labels
+        # self.device = config.device
         self.reforBert = ReforBertLM(
                             num_tokens= config.vocab_size,
                             dim= config.embedding_size,
@@ -17,13 +18,13 @@ class ReforBertForQA(ReforBertPreTrainedModel):
                             heads= config.heads,
                             max_seq_len= config.max_seq_len,
                             causal=True ) # model(inputs, segments)
-        self.device = torch.device(config.device)
         self.qa_outputs = nn.Linear(config.embedding_size, 2)
         self.init_weights()
 
     def from_pretrained(self, pretrained_model_path):
+        device = torch.device("cpu")
         if os.path.isfile(pretrained_model_path):
-            checkpoint = torch.load(pretrained_model_path, map_location=self.device)
+            checkpoint = torch.load(pretrained_model_path, map_location= device)
             self.reforBert.load_state_dict(checkpoint['model_state_dict'])
 
     def forward(

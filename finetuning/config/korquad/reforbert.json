@@ -32,15 +32,16 @@
   "model_name_or_path": "reforbert",
   "output_dir": "reforbert-korquad-ckpt",
   "checkpoint_path": "/checkpoint",
-  "pretrain_file_name": "reforbert-pretrain-model.pth",
+  "pretrain_file_name": "20-epoch-reforbert-base.pth",
   "vocab_txt": "kowiki.vocab",
   "vocab_model": "kowiki.model",
-  "pretrain_model_path": "/checkpoint/save_reforBERT_pretrain.pth",
+  "pretrain_model_path": "/checkpoint/20-epoch-reforbert-base.pth",
   "seed": 42,
   "train_batch_size": 32,
   "eval_batch_size": 64,
   "logging_steps": 1000,
   "save_steps": 1000,
   "learning_rate": 5e-5,
-  "cache_dir": "/Users/a60058238/Desktop/dev/workspace/ReforBERT/finetuning/data"
+  "cache_dir": "/Users/a60058238/Desktop/dev/workspace/ReforBERT/finetuning/data",
+  "device": "cuda"
 }
