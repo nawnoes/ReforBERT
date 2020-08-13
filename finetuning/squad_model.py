@@ -12,12 +12,13 @@ class ReforBertForQA(ReforBertPreTrainedModel):
         self.num_labels = config.num_labels
         # self.device = config.device
         self.reforBert = ReforBertLM(
-                            num_tokens= config.vocab_size,
-                            dim= config.embedding_size,
-                            depth= config.depth,
-                            heads= config.heads,
-                            max_seq_len= config.max_seq_len,
-                            causal=True ) # model(inputs, segments)
+            num_tokens=config.vocab_size,
+            dim=config.embedding_size,
+            depth=config.depth,
+            heads=config.heads,
+            max_seq_len=config.max_seq_len,
+            causal=True
+        )
         self.qa_outputs = nn.Linear(config.embedding_size, 2)
         self.init_weights()
 

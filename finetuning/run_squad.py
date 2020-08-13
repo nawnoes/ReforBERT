@@ -101,6 +101,7 @@ def train(args, train_dataset, model, tokenizer):
     global_step = 1
     epochs_trained = 0
     steps_trained_in_current_epoch = 0
+
     # Check if continuing training from a checkpoint
     if os.path.exists(args.model_name_or_path):
         try:
