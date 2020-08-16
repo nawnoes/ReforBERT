@@ -125,8 +125,10 @@ Seonghwan Kim
 |20.05.10| Colab에서 Pretrain 테스트| |
 |20.05.11| Colab 학습 중지 후 재개 부분 추가| |
 |2020.05.11~20.05.24| **BERT-base**모델 Colab 학습 진행| 학습시간이 오래 걸리는 문제로 **BERT-small**로 변경 |
-|20.7.12| **BERT-small**모델 Colab 학습 진행| |
-|20.7.27| **BERT-base**모델 nipa 학습 진행| |
+|20.7.12| **reforBERT-small**모델 Colab 학습 진행| |
+|20.7.27| **reforBERT-base**모델 nipa 학습 진행| |
+|20.8.16| **reforBERT-base**모델 korquad 성능 측정 좋지 못함.| |
+
 
 
 
